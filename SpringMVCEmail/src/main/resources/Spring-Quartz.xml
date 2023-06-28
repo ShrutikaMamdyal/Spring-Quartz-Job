@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd">
+         
+    <!--      
+	<bean id="exampleTrigger" class="springmvc.scheduler.myScheduler"/>
+	
+	<bean id="quartzJobTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+       <property name="targetObject" ref="exampleTrigger" />
+		<property name="targetMethod" value="run" />
+       </bean>      
+       
+       <bean id="quartzJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="quartzJobTask" />
+		<property name="cronExpression" value="0/5 * * * * ?" /> 
+	</bean>  
+	
+	<bean id="schFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="quartzJobTask" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="quartzJobTrigger" />				
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.threadPool.threadCount">3</prop>
+			</props>
+		</property>
+	</bean>
+	  -->
+
+	<bean id="quartzJob"
+		class="springmvc.scheduler.myScheduler" />
+	<bean id="jobFactoryBean"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="quartzJob" p:targetMethod="run" />
+	<bean id="triggerFactoryBean"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
+		p:jobDetail-ref="jobFactoryBean" p:cronExpression="0/5 * * * * ?" />
+	<bean
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		p:triggers-ref="triggerFactoryBean" />
+		
+
+         
+</beans>
